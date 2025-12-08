@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import initDB from './config/db'
 import { authRoutes } from './modules/auth/auth.routes'
+import { vehiclesRoutes } from './modules/vehicles/vehicles.routes'
 const app = express()
 const port = process.env.PORT || 5000
 
@@ -10,8 +11,11 @@ initDB()
 app.use(express.json())
 
 
-//auth router
+//auth routes
 app.use("/api/v1/auth",authRoutes)
+
+//vehicle routes
+app.use('/api/v1',vehiclesRoutes)
 
 
 
