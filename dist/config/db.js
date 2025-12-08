@@ -1,14 +1,17 @@
-import config from '.'
-import { Pool } from 'pg'
-
-
-export const pool = new Pool({
-    connectionString: `${config.connection_str}`
-})
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.pool = void 0;
+const _1 = __importDefault(require("."));
+const pg_1 = require("pg");
+exports.pool = new pg_1.Pool({
+    connectionString: `${_1.default.connection_str}`
+});
 const initDB = async () => {
     // USERS TABLE
-    await pool.query(`
+    await exports.pool.query(`
       CREATE TABLE IF NOT EXISTS users(
         id SERIAL PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
@@ -20,10 +23,8 @@ const initDB = async () => {
         updated_at TIMESTAMP DEFAULT NOW()
       );
     `);
-  
-
     // VEHICLES TABLE
-    await pool.query(`
+    await exports.pool.query(`
       CREATE TABLE IF NOT EXISTS vehicles(
         id SERIAL PRIMARY KEY,
         vehicle_name VARCHAR(150) NOT NULL,
@@ -35,10 +36,8 @@ const initDB = async () => {
         updated_at TIMESTAMP DEFAULT NOW()
       );
     `);
-  
-   
     // BOOKINGS TABLE
-    await pool.query(`
+    await exports.pool.query(`
       CREATE TABLE IF NOT EXISTS bookings(
         id SERIAL PRIMARY KEY,
         customer_id INT REFERENCES users(id) ON DELETE CASCADE,
@@ -51,7 +50,5 @@ const initDB = async () => {
         updated_at TIMESTAMP DEFAULT NOW()
       );
     `);
-  };
-  
-  export default initDB;
-  
+};
+exports.default = initDB;

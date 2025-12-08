@@ -1,9 +1,15 @@
 import express, { Request, Response } from 'express'
+import initDB from './config/db'
 const app = express()
-const port = 3000
+const port = process.env.PORT || 5000
+
+
+initDB()
+
+app.use(express.json())
 
 app.get('/', (req:Request, res:Response) => {
-  res.send('Hello World!')
+  res.send('This is 2nd Assignment')
 })
 
 app.listen(port, () => {
