@@ -33,7 +33,18 @@ const registerUser = async(req:Request,res:Response) => {
 
 //login user
 const loginUser = async(req : Request,res:Response) => {
-    
+    const {email,password} = req.body
+
+    try{
+        const user = await authService.loginUser(email,password)
+
+    }catch(err:any){
+        res.status(500).json({
+            success : false,
+            message : err.message
+        })
+    }
+
 
 }
 
