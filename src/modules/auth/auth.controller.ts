@@ -1,6 +1,8 @@
 import { Request, Response } from "express"
 import { authService } from "./auth.service"
 
+
+//register user
 const registerUser = async(req:Request,res:Response) => {
 
     try{
@@ -27,6 +29,17 @@ const registerUser = async(req:Request,res:Response) => {
     }
 
 }
+
+
+//login user
+const loginUser = async(req : Request,res:Response) => {
+    
+
+}
+
+
+
 export const authController = {
-    registerUser
+    registerUser,
+    loginUser
 }
