@@ -8,7 +8,7 @@ const registerUser = async(req:Request,res:Response) => {
     try{
         const user = await authService.registerUser(req.body)
         
-        res.status(200).json({
+        res.status(201).json({
             success : true,
             message : "User registered Successfully",
             data : {
@@ -36,8 +36,31 @@ const loginUser = async(req : Request,res:Response) => {
     const {email,password} = req.body
 
     try{
-        const user = await authService.loginUser(email,password)
+        const response = await authService.loginUser(email,password)
 
+        if(!response){
+            return res.status(401).json({
+                success : false,
+                message : "Invalid email or password"
+            })
+        }
+
+        const {token,user} = response
+
+        res.status(200).json({
+            success : true,
+            message : "Login successfull",
+            data : {
+                token : token,
+                user : {
+                    id:user.id,
+                    name : user.name,
+                    email : user.email,
+                    phone : user.phone,
+                    role : user.role
+                }
+            }
+        })
     }catch(err:any){
         res.status(500).json({
             success : false,

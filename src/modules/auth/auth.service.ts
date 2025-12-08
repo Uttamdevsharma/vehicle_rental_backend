@@ -3,6 +3,7 @@ import { pool } from '../../config/db'
 import jwt from 'jsonwebtoken'
 import config from '../../config';
 
+
 //user register
 const registerUser = async (payload: Record<string, unknown>) => {
   const { name, email, password, phone, role } = payload;
