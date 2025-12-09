@@ -3,6 +3,7 @@ import initDB from './config/db'
 import { authRoutes } from './modules/auth/auth.routes'
 import { vehiclesRoutes } from './modules/vehicles/vehicles.routes'
 import { userRoutes } from './modules/users/user.routes'
+import { bookingRoutes } from './modules/bookings/bookings.route'
 const app = express()
 const port = process.env.PORT || 5000
 
@@ -20,6 +21,9 @@ app.use('/api/v1/vehicles',vehiclesRoutes)
 
 //user routes
 app.use('/api/v1/users',userRoutes)
+
+//booking routes
+app.use('/api/v1/bookings',bookingRoutes)
 
 
 
