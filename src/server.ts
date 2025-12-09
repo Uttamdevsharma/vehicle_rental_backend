@@ -15,7 +15,7 @@ app.use(express.json())
 app.use("/api/v1/auth",authRoutes)
 
 //vehicle routes
-app.use('/api/v1',vehiclesRoutes)
+app.use('/api/v1/vehicles',vehiclesRoutes)
 
 
 

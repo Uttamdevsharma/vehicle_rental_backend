@@ -5,16 +5,20 @@ const router = express.Router()
 
 
 //create vehicle
-router.post('/vehicles',auth("admin"),vehiclesController.createVehicle)
+router.post('/',auth("admin"),vehiclesController.createVehicle)
 
 //get all vehicle
-router.get('/vehicles',vehiclesController.getAllVehicle)
+router.get('/',vehiclesController.getAllVehicle)
 
 //get single vehicle
-router.get('/vehicles/:vehicleId',vehiclesController.getSingleVehicle)
+router.get('/:vehicleId',vehiclesController.getSingleVehicle)
 
 
 //update vehicle
-router.put('/vehicles/:vehicleId',vehiclesController.updateVehicle)
+router.put('/:vehicleId',vehiclesController.updateVehicle)
+
+
+//delete vehicle
+router.delete('/:vehicleId',vehiclesController.deleteVehicle)
 
 export const vehiclesRoutes = router
