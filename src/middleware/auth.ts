@@ -4,7 +4,7 @@ import config from '../config';
 
 
 
-const auth = (...roles: string[]) => {
+const auth = (roles: string[]) => {
     return async(req:Request,res:Response,next:NextFunction) => {
 
         try{
@@ -17,7 +17,7 @@ const auth = (...roles: string[]) => {
             }
 
             const token = authHeader.split(' ')[1];
-            const decoded = jwt.verify(token as string,config.jwt_secret as string) as JwtPayload
+            const decoded = jwt.verify(token as string,config.jwt_secret as string) as JwtPayload & { id: string; role: string };
             req.user = decoded
 
             if(roles.length && !roles.includes(decoded.role)){

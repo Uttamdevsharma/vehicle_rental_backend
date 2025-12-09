@@ -6,12 +6,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const db_1 = __importDefault(require("./config/db"));
 const auth_routes_1 = require("./modules/auth/auth.routes");
+const vehicles_routes_1 = require("./modules/vehicles/vehicles.routes");
+const user_routes_1 = require("./modules/users/user.routes");
 const app = (0, express_1.default)();
 const port = process.env.PORT || 5000;
 (0, db_1.default)();
 app.use(express_1.default.json());
-//auth router
+//auth routes
 app.use("/api/v1/auth", auth_routes_1.authRoutes);
+//vehicle routes
+app.use('/api/v1/vehicles', vehicles_routes_1.vehiclesRoutes);
+//user routes
+app.use('/api/v1/users', user_routes_1.userRoutes);
 app.get('/', (req, res) => {
     res.send('This is 2nd Assignment');
 });
