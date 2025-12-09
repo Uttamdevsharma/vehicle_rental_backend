@@ -8,7 +8,9 @@ router.post('/',auth(["admin","customer"]),bookingControllers.createBooking )
 
 
 //get all booking
-router.get("/",auth(["admin"]),bookingControllers.getAllBookings)
+router.get("/",auth(["admin","customer"]),bookingControllers.getAllBookings)
+
+
 
 
 export const bookingRoutes = router

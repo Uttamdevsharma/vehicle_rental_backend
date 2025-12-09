@@ -32,7 +32,6 @@ const createBooking = async(req:Request,res:Response) => {
 const getAllBookings = async(req:Request,res:Response) => {
 
     try{
-
         const user = req.user as JwtPayload & { id: string | number; role: string };
 
         if(user.role === "admin"){
@@ -43,6 +42,15 @@ const getAllBookings = async(req:Request,res:Response) => {
                 data : bookings
             })
         }
+
+
+        const customerBookings = await bookingService.getAllBookingsCustomer()
+
+        res.status(200).json({
+            success:true,
+            message : "Your bookings retrieved successfully",
+            data : customerBookings
+        })
 
     }catch(err:any){
         res.status(500).json({

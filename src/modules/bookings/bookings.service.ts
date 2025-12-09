@@ -114,18 +114,49 @@ const getAllBookingsAdmin = async() => {
             registration_number: booking.registration_number
         }
     }));
-    
-
-
-
-
 }
 
 
 
+//get all bookings by customer
+const getAllBookingsCustomer = async() => {
+
+    const result = await pool.query(
+        `SELECT 
+        b.id,
+        b.vehicle_id,
+        b.rent_start_date,
+        b.rent_end_date,
+        b.total_price,
+        b.status,
+
+        v.vehicle_name,
+        v.registration_number,
+        v.type
+
+        FROM bookings b
+        JOIN vehicles v ON b.vehicle_id = v.id 
+
+        `
+    )
+    return result.rows.map((booking) => ({
+        id: booking.id,
+        vehicle_id : booking.vehicle_id,
+        rent_start_date: booking.rent_start_date,
+        rent_end_date :booking.rent_end_date,
+        total_price : booking.total_price,
+        status:booking.status,
+        vehicle : {
+            vehicle_name : booking.vehicle_name,
+            registration_number : booking.registration_number,
+            type : booking.type
+        }
+    }))
+}
 
 
 export const bookingService = {
     createBooking,
-    getAllBookingsAdmin
+    getAllBookingsAdmin,
+    getAllBookingsCustomer
 }
