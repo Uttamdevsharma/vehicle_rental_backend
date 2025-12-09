@@ -11,6 +11,8 @@ router.post('/',auth(["admin","customer"]),bookingControllers.createBooking )
 router.get("/",auth(["admin","customer"]),bookingControllers.getAllBookings)
 
 
+//update booking
+router.put("/:bookingId",auth(["admin","customer"]),bookingControllers.updateBooking)
 
 
 export const bookingRoutes = router

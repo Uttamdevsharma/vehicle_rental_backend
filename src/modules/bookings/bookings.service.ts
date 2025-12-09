@@ -155,8 +155,61 @@ const getAllBookingsCustomer = async() => {
 }
 
 
+// get a single booking by id
+const getBookingById = async (bookingId: string) => {
+    const result = await pool.query(`SELECT * FROM bookings WHERE id = $1`, [bookingId]);
+    return result.rows[0];
+};
+
+// update booking
+const updateBooking = async (bookingId: string, status: string) => {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+
+        const bookingResult = await client.query(
+            `SELECT * FROM bookings WHERE id = $1`,
+            [bookingId]
+        );
+
+        if (bookingResult.rows.length === 0) {
+            throw new Error("Booking not found");
+        }
+
+        const booking = bookingResult.rows[0];
+
+        const updatedBookingResult = await client.query(
+            `UPDATE bookings SET status = $1 WHERE id = $2 RETURNING id, customer_id, vehicle_id, rent_start_date, rent_end_date, total_price, status`,
+            [status, bookingId]
+        );
+
+        const updatedBooking = updatedBookingResult.rows[0];
+        
+        if (status === 'returned' || status === 'cancelled') {
+            await client.query(
+                `UPDATE vehicles SET availability_status = 'available' WHERE id = $1`,
+                [booking.vehicle_id]
+            );
+        }
+
+        await client.query('COMMIT');
+
+        return updatedBooking;
+
+    } catch (error) {
+        await client.query('ROLLBACK');
+        throw error;
+    } finally {
+        client.release();
+    }
+};
+
+
+
 export const bookingService = {
     createBooking,
     getAllBookingsAdmin,
-    getAllBookingsCustomer
+    getAllBookingsCustomer,
+    getBookingById,
+    updateBooking
 }
