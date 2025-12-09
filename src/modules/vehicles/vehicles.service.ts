@@ -1,6 +1,6 @@
 import { pool } from "../../config/db";
 
-
+//create vehicle
 const createVehicle = async(payload:Record<string,unknown>) => {
     const { vehicle_name, type, registration_number, daily_rent_price, availability_status } = payload;
 
@@ -16,6 +16,16 @@ const createVehicle = async(payload:Record<string,unknown>) => {
 
 }
 
+
+//get all vehicle
+const getAllVehicle = async() => {
+
+    const result = await pool.query('SELECT * FROM vehicles')
+
+    return result
+}
+
 export const vehicleService = {
-    createVehicle
+    createVehicle,
+    getAllVehicle
 }
