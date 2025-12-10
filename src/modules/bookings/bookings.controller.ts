@@ -135,6 +135,9 @@ const updateBooking = async(req:Request,res:Response) => {
 }
 
 
+
+
+
 export const bookingControllers = {
     createBooking,
     getAllBookings,

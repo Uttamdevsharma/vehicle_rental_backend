@@ -23,7 +23,29 @@ const updateUser = async(payload : Record<string,unknown>) => {
 
 }
 
+//check active booking any user
+const hasActiveBooking = async(id:string) => {
+
+    const result  = await pool.query(
+        `SELECT customer_id FROM bookings WHERE id=$1 AND status = 'active'`,[id]
+    )
+
+    return result.rows.length > 0
+
+}
+
+//delete user
+const deleteUser = async(id:string )=>{
+
+    const result = await pool.query(
+        `DELETE FROM users WHERE id = $1`,[id]
+    )
+    return result.rows[0]
+}
+
 export const userService = {
     getAllUsers,
-    updateUser
+    updateUser,
+    hasActiveBooking,
+    deleteUser
 }

@@ -71,7 +71,41 @@ const updateUser = async(req:Request,res:Response) => {
     
 }
 
+
+//delete a user
+const deleteUser = async(req:Request,res:Response) => {
+
+    const {userId} = req.params
+
+    const user = req.user as JwtPayload & {role:string}
+
+    if(user.role !== "admin") {
+        return res.status(403).json({
+            success:false,
+            message : "Only admins can delete users"
+        })
+    }
+
+    const hasActiveBooking =  await userService.hasActiveBooking(userId as string)
+
+    if(hasActiveBooking){
+        return res.status(400).json({
+            success:false,
+            message : "user can not be deleted because they have active bookings"
+        })
+    }
+
+    const deleted = await userService.deleteUser(userId as string)
+
+    return res.status(200).json({
+        success:true,
+        message : "User deleted successfully"
+    })
+    
+}
+
 export const usersController = {
     getAllUsers,
-    updateUser
+    updateUser,
+    deleteUser
 }
