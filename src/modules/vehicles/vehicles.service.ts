@@ -73,11 +73,13 @@ return result.rows[0];
 };
 
 
-const hasActiveBooking = async() => {
+const hasActiveBooking = async(id:string) => {
 
   const result = await pool.query(
-    `SELECT id WHERE customer_id=$1 AND status = "active"`,[id]
+    `SELECT id FROM bookings WHERE vehicle_id=$1 AND status = 'active'`,[id]
   )
+
+  return result.rows.length > 0
 
 }
 
@@ -86,9 +88,8 @@ const hasActiveBooking = async() => {
 const deleteVehicle  = async(id:string) => {
 
   const result = await pool.query(
-    `DELETE FROM vehicles WHERE id=$1`,[id]
+    `DELETE FROM vehicles WHERE id=$1 RETURNING *`,[id]
   )
-
    return result
 
 }

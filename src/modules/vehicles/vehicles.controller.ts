@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { vehicleService } from "./vehicles.service";
+import { JwtPayload } from "jsonwebtoken";
 
 //create vehicle
 const createVehicle = async(req:Request,res:Response) => {
@@ -123,21 +124,35 @@ const updateVehicle = async(req:Request,res:Response) => {
 
 //delete vehicle
 const deleteVehicle = async(req:Request,res:Response) => {
-    try{
-        const result = await vehicleService.deleteVehicle(req.params.vehicleId as string)
 
-        if(result.rowCount === 0){
-            res.status(404).json({
+    const {vehicleId} = req.params;
+    const user = req.user as JwtPayload & {role:string}
+    try{
+
+        if(user.role !== 'admin'){
+            return res.status(403).json({
                 success:false,
-                message : 'User not found'
-            })
-        }else{
-            res.status(200).json({
-                success:true,
-                message: "Vehicle deleted successfully"
+                message : "just admin access this routes"
             })
         }
 
+        const result = await vehicleService.hasActiveBooking(vehicleId as string)
+
+        if(result){
+            return res.status(400).json({
+                success:false,
+                message : "vehicle can not deleted because they have active bookings"
+            })
+        }
+
+        const deleted = await  vehicleService.deleteVehicle(vehicleId as string)
+
+        res.status(200).json({
+            success : true,
+            message : "Vehicle deleted successfully"
+        })
+
+        
     }catch(err:any){
         res.status(500).json({
             success:false,
