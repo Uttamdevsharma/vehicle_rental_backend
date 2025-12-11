@@ -15,7 +15,7 @@ const updateUser = async (payload) => {
 };
 //check active booking any user
 const hasActiveBooking = async (id) => {
-    const result = await db_1.pool.query(`SELECT customer_id FROM bookings WHERE id=$1 AND status = 'active'`, [id]);
+    const result = await db_1.pool.query(`SELECT customer_id FROM bookings WHERE customer_id=$1 AND status = 'active'`, [id]);
     return result.rows.length > 0;
 };
 //delete user

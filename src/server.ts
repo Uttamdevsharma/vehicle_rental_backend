@@ -33,7 +33,7 @@ app.use('/api/v1/bookings',bookingRoutes)
 
 
 app.get('/', (req:Request, res:Response) => {
-  res.send('This is 2nd Assignment')
+  res.send('Welcome to the Vehicle Rental Management System API ')
 })
 
 app.listen(port, () => {

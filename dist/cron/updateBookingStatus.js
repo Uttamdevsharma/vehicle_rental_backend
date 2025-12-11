@@ -9,7 +9,6 @@ const db_1 = require("../config/db");
 const bookings_service_1 = require("../modules/bookings/bookings.service");
 // Function to find and update overdue bookings
 const updateOverdueBookings = async () => {
-    console.log('Running cron job to update overdue bookings...');
     try {
         const query = `
       SELECT id
@@ -32,7 +31,6 @@ const updateOverdueBookings = async () => {
         console.error('Error updating overdue bookings:', error);
     }
 };
-// Schedule the job to run once every day at midnight
 const startUpdateBookingStatusCron = () => {
     node_cron_1.default.schedule('0 0 * * *', updateOverdueBookings);
 };

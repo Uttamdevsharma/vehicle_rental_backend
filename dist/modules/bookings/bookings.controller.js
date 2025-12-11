@@ -32,7 +32,7 @@ const getAllBookings = async (req, res) => {
                 data: bookings
             });
         }
-        const customerBookings = await bookings_service_1.bookingService.getAllBookingsCustomer();
+        const customerBookings = await bookings_service_1.bookingService.getAllBookingsCustomer(user.id);
         res.status(200).json({
             success: true,
             message: "Your bookings retrieved successfully",

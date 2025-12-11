@@ -21,12 +21,14 @@ const createBooking = async (payload) => {
     const days = Math.ceil(difference / (1000 * 60 * 60 * 24));
     //total price
     const total_price = vehicle.daily_rent_price * days;
+    const booking_status = end.getTime() < new Date().getTime() ? 'returned' : 'active';
+    const availability_status = booking_status === 'returned' ? 'available' : 'booked';
     const bookingResult = await db_1.pool.query(`INSERT INTO bookings (customer_id, vehicle_id, rent_start_date, rent_end_date, total_price, status)
-        VALUES ($1,$2,$3,$4,$5,'active')
-        RETURNING id, customer_id, vehicle_id, rent_start_date, rent_end_date, total_price, status`, [customer_id, vehicle_id, rent_start_date, rent_end_date, total_price]);
+        VALUES ($1,$2,$3,$4,$5,$6)
+        RETURNING id, customer_id, vehicle_id, rent_start_date, rent_end_date, total_price, status`, [customer_id, vehicle_id, rent_start_date, rent_end_date, total_price, booking_status]);
     const booking = bookingResult.rows[0];
     // update vehicle status
-    await db_1.pool.query(`UPDATE vehicles SET availability_status='booked' WHERE id=$1`, [vehicle_id]);
+    await db_1.pool.query(`UPDATE vehicles SET availability_status=$1 WHERE id=$2`, [availability_status, vehicle_id]);
     return {
         ...booking,
         vehicle: {
@@ -76,7 +78,7 @@ const getAllBookingsAdmin = async () => {
     }));
 };
 //get all bookings by customer
-const getAllBookingsCustomer = async () => {
+const getAllBookingsCustomer = async (customerId) => {
     const result = await db_1.pool.query(`SELECT 
         b.id,
         b.vehicle_id,
@@ -91,8 +93,9 @@ const getAllBookingsCustomer = async () => {
 
         FROM bookings b
         JOIN vehicles v ON b.vehicle_id = v.id 
+        WHERE b.customer_id = $1
 
-        `);
+        `, [customerId]);
     return result.rows.map((booking) => ({
         id: booking.id,
         vehicle_id: booking.vehicle_id,

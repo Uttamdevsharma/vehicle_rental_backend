@@ -25,7 +25,7 @@ app.use('/api/v1/users', user_routes_1.userRoutes);
 //booking routes
 app.use('/api/v1/bookings', bookings_route_1.bookingRoutes);
 app.get('/', (req, res) => {
-    res.send('This is 2nd Assignment');
+    res.send('Welcome to the Vehicle Rental Management System API ');
 });
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

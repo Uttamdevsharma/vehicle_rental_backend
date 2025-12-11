@@ -9,7 +9,7 @@ const user_controller_1 = require("./user.controller");
 const auth_1 = __importDefault(require("../../middleware/auth"));
 const router = express_1.default.Router();
 // get all users
-router.get('/', (0, auth_1.default)(["admin", "customer"]), user_controller_1.usersController.getAllUsers);
+router.get('/', (0, auth_1.default)(["admin"]), user_controller_1.usersController.getAllUsers);
 // update user
 router.put('/:userId', (0, auth_1.default)(["admin", "customer"]), user_controller_1.usersController.updateUser);
 //delete user if no active booking exist
