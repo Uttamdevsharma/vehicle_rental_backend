@@ -42,9 +42,13 @@ const updateVehicle = async (payload) => {
     ]);
     return result.rows[0];
 };
+const hasActiveBooking = async (id) => {
+    const result = await db_1.pool.query(`SELECT id FROM bookings WHERE vehicle_id=$1 AND status = 'active'`, [id]);
+    return result.rows.length > 0;
+};
 //delete vehicle
 const deleteVehicle = async (id) => {
-    const result = await db_1.pool.query(`DELETE FROM vehicles WHERE id=$1`, [id]);
+    const result = await db_1.pool.query(`DELETE FROM vehicles WHERE id=$1 RETURNING *`, [id]);
     return result;
 };
 exports.vehicleService = {
@@ -52,5 +56,6 @@ exports.vehicleService = {
     getAllVehicle,
     getSingleVehicle,
     updateVehicle,
+    hasActiveBooking,
     deleteVehicle
 };

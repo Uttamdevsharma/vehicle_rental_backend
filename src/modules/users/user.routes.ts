@@ -5,7 +5,7 @@ import { userService } from './user.service'
 const router= express.Router()
 
 // get all users
-router.get('/',auth(["admin","customer"]),usersController.getAllUsers)
+router.get('/',auth(["admin"]),usersController.getAllUsers)
 
 
 // update user

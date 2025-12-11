@@ -104,20 +104,27 @@ const updateVehicle = async (req, res) => {
 };
 //delete vehicle
 const deleteVehicle = async (req, res) => {
+    const { vehicleId } = req.params;
+    const user = req.user;
     try {
-        const result = await vehicles_service_1.vehicleService.deleteVehicle(req.params.vehicleId);
-        if (result.rowCount === 0) {
-            res.status(404).json({
+        if (user.role !== 'admin') {
+            return res.status(403).json({
                 success: false,
-                message: 'User not found'
+                message: "just admin access this routes"
             });
         }
-        else {
-            res.status(200).json({
-                success: true,
-                message: "Vehicle deleted successfully"
+        const result = await vehicles_service_1.vehicleService.hasActiveBooking(vehicleId);
+        if (result) {
+            return res.status(400).json({
+                success: false,
+                message: "vehicle can not deleted because they have active bookings"
             });
         }
+        const deleted = await vehicles_service_1.vehicleService.deleteVehicle(vehicleId);
+        res.status(200).json({
+            success: true,
+            message: "Vehicle deleted successfully"
+        });
     }
     catch (err) {
         res.status(500).json({

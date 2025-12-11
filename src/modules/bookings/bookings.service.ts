@@ -31,14 +31,17 @@ const createBooking = async(payload: Record<string,unknown>) => {
 
    
     //total price
-    const total_price = vehicle.daily_rent_price * days
+    const total_price = vehicle.daily_rent_price * days;
+
+    const booking_status = end.getTime() < new Date().getTime() ? 'returned' : 'active';
+    const availability_status = booking_status === 'returned' ? 'available' : 'booked';
 
 
     const bookingResult = await pool.query(
         `INSERT INTO bookings (customer_id, vehicle_id, rent_start_date, rent_end_date, total_price, status)
-        VALUES ($1,$2,$3,$4,$5,'active')
+        VALUES ($1,$2,$3,$4,$5,$6)
         RETURNING id, customer_id, vehicle_id, rent_start_date, rent_end_date, total_price, status`,
-        [customer_id, vehicle_id, rent_start_date, rent_end_date, total_price]
+        [customer_id, vehicle_id, rent_start_date, rent_end_date, total_price, booking_status]
 
     )
 
@@ -46,7 +49,7 @@ const createBooking = async(payload: Record<string,unknown>) => {
 
     // update vehicle status
     await pool.query(
-        `UPDATE vehicles SET availability_status='booked' WHERE id=$1`,[vehicle_id]
+        `UPDATE vehicles SET availability_status=$1 WHERE id=$2`,[availability_status, vehicle_id]
     )
 
     return {
@@ -119,7 +122,7 @@ const getAllBookingsAdmin = async() => {
 
 
 //get all bookings by customer
-const getAllBookingsCustomer = async() => {
+const getAllBookingsCustomer = async(customerId:string | number) => {
 
     const result = await pool.query(
         `SELECT 
@@ -136,8 +139,9 @@ const getAllBookingsCustomer = async() => {
 
         FROM bookings b
         JOIN vehicles v ON b.vehicle_id = v.id 
+        WHERE b.customer_id = $1
 
-        `
+        `, [customerId]
     )
     return result.rows.map((booking) => ({
         id: booking.id,

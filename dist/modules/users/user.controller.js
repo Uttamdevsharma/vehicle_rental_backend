@@ -60,7 +60,31 @@ const updateUser = async (req, res) => {
         });
     }
 };
+//delete a user
+const deleteUser = async (req, res) => {
+    const { userId } = req.params;
+    const user = req.user;
+    if (user.role !== "admin") {
+        return res.status(403).json({
+            success: false,
+            message: "Only admins can delete users"
+        });
+    }
+    const hasActiveBooking = await user_service_1.userService.hasActiveBooking(userId);
+    if (hasActiveBooking) {
+        return res.status(400).json({
+            success: false,
+            message: "user can not be deleted because they have active bookings"
+        });
+    }
+    const deleted = await user_service_1.userService.deleteUser(userId);
+    return res.status(200).json({
+        success: true,
+        message: "User deleted successfully"
+    });
+};
 exports.usersController = {
     getAllUsers,
-    updateUser
+    updateUser,
+    deleteUser
 };

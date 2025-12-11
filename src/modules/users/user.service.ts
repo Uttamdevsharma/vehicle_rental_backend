@@ -27,7 +27,7 @@ const updateUser = async(payload : Record<string,unknown>) => {
 const hasActiveBooking = async(id:string) => {
 
     const result  = await pool.query(
-        `SELECT customer_id FROM bookings WHERE id=$1 AND status = 'active'`,[id]
+        `SELECT customer_id FROM bookings WHERE customer_id=$1 AND status = 'active'`,[id]
     )
 
     return result.rows.length > 0

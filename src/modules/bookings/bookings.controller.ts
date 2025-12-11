@@ -44,7 +44,7 @@ const getAllBookings = async(req:Request,res:Response) => {
         }
 
 
-        const customerBookings = await bookingService.getAllBookingsCustomer()
+        const customerBookings = await bookingService.getAllBookingsCustomer(user.id)
 
         res.status(200).json({
             success:true,

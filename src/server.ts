@@ -4,11 +4,15 @@ import { authRoutes } from './modules/auth/auth.routes'
 import { vehiclesRoutes } from './modules/vehicles/vehicles.routes'
 import { userRoutes } from './modules/users/user.routes'
 import { bookingRoutes } from './modules/bookings/bookings.route'
+import { startUpdateBookingStatusCron } from './cron/updateBookingStatus'
 const app = express()
 const port = process.env.PORT || 5000
 
 
 initDB()
+
+// Start the cron job to update booking statuses
+startUpdateBookingStatusCron();
 
 app.use(express.json())
 
