@@ -2,7 +2,8 @@
 
 This is the backend API for a Vehicle Rental Management System. It provides endpoints for managing users, vehicles, and bookings, with role-based access control for administrators and customers.
 
-**Live Backend URL:** [https://vehiclerent-api.vercel.app](https://vehiclerent-api.vercel.app)
+**Live Backend URL:** [https://vehicle-rental-backend-six.vercel.app](https://vehicle-rental-backend-six.vercel.app)
+
 
 ---
 
